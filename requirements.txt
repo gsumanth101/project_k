@@ -1,0 +1,12 @@
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Login
+transformers
+Pillow
+torch
+matplotlib
+google-generativeai
+psycopg2
+Flask-WTF
+flask_wtf

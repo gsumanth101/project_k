@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keratoconus Classification Result</title>
+    
+    <!-- Set the favicon for the webpage -->
+    <link rel="icon" href="https://sandtoneyeclinic.co.za/wp-content/uploads/2021/12/thumbnail_Keratoconus-SEC-web-image.jpg" type="image/jpeg">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Set the original background image for the whole page */
+        body {
+            background-image: url('https://wallpapers.com/images/featured/light-color-background-x69l528mcyszadke.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+        }
+
+        /* Position the eye image in the top-left corner */
+        .eye-image {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            z-index: 10;
+            border: 5px solid #ffc107;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .eye-image:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+
+        /* Wrapper for both the detailed information and image sections */
+        .result-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Image and Progression Graph Section */
+        .image-graph-container {
+            width: 100%;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            text-align: center;
+        }
+
+        .image-graph-container h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #ffc107;
+        }
+
+        /* Folder-style Styling for the Detailed Information */
+        .folder-card {
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(249, 247, 164, 0.8), rgba(240, 240, 240, 0.9));
+            padding: 20px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .folder-card-body {
+            padding-left: 20px;
+            color: black;
+        }
+
+        .list-group-item {
+            border: none;
+            background-color: transparent;
+            padding: 10px 0;
+        }
+
+        /* Styling the YouTube video frame */
+        .video-frame {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            height: 180px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            border: 3px solid #ffc107;
+            z-index: 100;
+        }
+
+        /* Styling for the pop-up */
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .popup-container.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .popup-header {
+            font-size: 1.5rem;
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+
+        .popup-content {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .popup-close-btn {
+            background-color: #ffc107;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup-close-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* Visual Acuity Test Section */
+        .acuity-chart-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .snellen-chart {
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .blurred {
+            filter: blur(4px); /* Blur effect to simulate poor vision */
+        }
+
+        .acuity-button {
+            background-color: #ffc107;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #000;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .acuity-button:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+        @media (max-width: 768px) {
+            .result-container {
+                padding: 20px;
+            }
+            h1, h2 {
+                font-size: 1.5rem;
+            }
+        }
+        .scrollable-navbar {
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        .scrollable-footer {
+            overflow-y: auto;
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Common Navbar -->
+    <nav class="scrollable-navbar fixed top-0 w-full bg-white shadow-md">
+        {% include 'navbar.html' %}
+    </nav>
+
+    <!-- New Circular Eye Image in the Top-Left Corner -->
+    <img src="https://t4.ftcdn.net/jpg/06/78/07/07/360_F_678070756_4vAQtXVLZGYWu4Bxll7Vdz4o2nWYyATd.jpg" alt="Eye Icon" class="eye-image" onclick="togglePopup()">
+
+    <!-- YouTube Video Frame -->
+    <!-- <iframe class="video-frame" src="https://www.youtube.com/embed/laN2hygbS_s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+    <div class="container mt-20 pt-5">
+        <h1 class="text-center">Keratoconus Classification Result</h1>
+        <h2 class="text-center">The predicted class is: {{ result }}</h2>
+
+        <!-- Result Container -->
+        <div class="result-container">
+            <div class="main-content mt-4">
+                <!-- Image and Progression Graph Section -->
+                <div class="image-graph-container">
+                    <div class="uploaded-image">
+                        <h3>Uploaded Image</h3>
+                        <img src="{{ url_for('static', filename='uploads/KCN_1_CT_A.png') }}" alt="Uploaded Image">
+                    </div>
+
+                    <div>
+                        <h3>Progression Graph</h3>
+                        <img src="{{ url_for('static', filename=graph_path.split('static/')[1]) }}" alt="Progression Graph">
+                    </div>
+                </div>
+
+                <!-- Visual Acuity Test Section -->
+                <div class="acuity-chart-container">
+                    <h3>Simulated Visual Acuity Chart</h3>
+                    <div class="snellen-chart">
+                        <p class="blurred">E</p>
+                        <p class="blurred">F P</p>
+                        <p class="blurred">T O Z</p>
+                        <p class="blurred">L P E D</p>
+                        <p class="blurred">P E C F D</p>
+                        <p class="blurred">E D F C Z P</p>
+                    </div>
+                    <button class="acuity-button" onclick="toggleBlur()">Test My Vision</button>
+                </div>
+
+                <!-- Detailed Information Section -->
+                <div class="detailed-info-container">
+                    <h3>Detailed Information:</h3>
+                    <div class="folder-card">
+                        <div class="folder-card-body">
+                            <ul class="list-group">
+                                {% for point in stage_info %}
+                                    <li class="list-group-item">{{ point | safe }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up Window -->
+    <div class="popup-container" id="popupWindow">
+        <div class="popup-header">Keratoconus Information</div>
+        <div class="popup-content">
+            <p>Keratoconus is a progressive eye condition where the cornea thins and bulges into a cone shape, leading to distorted vision.</p>
+            <p>It can cause problems with vision and may require treatments like special contact lenses or surgery.</p>
+        </div>
+        <button class="popup-close-btn" onclick="togglePopup()">Close</button>
+    </div>
+
+    <!-- Common Footer -->
+    <footer class="scrollable-footer fixed bottom-0 w-full bg-white shadow-md">
+        {% include 'footer.html' %}
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript for toggling visual acuity blur and pop-up window -->
+    <script>
+        function toggleBlur() {
+            const chartText = document.querySelectorAll('.snellen-chart p');
+            chartText.forEach((text) => {
+                text.classList.toggle('blurred');
+            });
+        }
+
+        function togglePopup() {
+            const popup = document.getElementById('popupWindow');
+            popup.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

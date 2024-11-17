@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keratoconus Classification</title>
+</head>
+<body>
+    <h1>Keratoconus Classification</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="image_file">Upload Image:</label>
+        <input type="file" id="image_file" name="image_file" accept="image/*" required>
+        <button type="submit">Classify</button>
+    </form>
+    {% if result %}
+        <h2>The predicted class is: {{ result }}</h2>
+    {% endif %}
+</body>
+</html>
